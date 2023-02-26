@@ -1,3 +1,5 @@
+// Assignment Link: https://perscholas.instructure.com/courses/1297/pages/week-5-day-4-lecture-slash-mini-project-slash-sba-save-the-universe?module_item_id=776654
+
 // Create a class Ship
 class Ship {
     constructor(name, hull, firepower, accuracy) {
