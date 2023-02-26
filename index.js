@@ -7,8 +7,15 @@ class Ship {
         this.accuracy = accuracy;
     }
     // All ships have the action 'attack'
-    attack() {
+    attack(enemy) {
         console.log(`${this.name} is attacking!`);
+        if (Math.random() < this.accuracy) {
+            enemy.hull -= this.firepower
+            console.log(`${enemy.name} takes ${this.firepower} damage!`)
+        } else {
+            console.log(`${this.name} missed!`)
+        }
+        console.log(`${enemy.name} has ${enemy.hull} hp left.`)
     }
 }
 // Create Human Ship Subclass
@@ -32,6 +39,20 @@ class alienShip extends Ship {
         accuracy = (Math.floor(Math.random() * 3) + 6) / 10;
     }
 
+// Create a game object
+
+class Game {
+    static checkWin(ship) {
+        if (ship.hull <= 0) {
+            console.log(`${ship.name} has been defeated.`)
+        } else {
+            console.log(`${ship.name} is still in the game.`)
+        }
+    }
+
+    static playGame(humanPlayer, alienPlayers)
+    
+}
 // Instance(s) of each subclass
 
 const ussAssShip = new humanShip();
@@ -54,3 +75,6 @@ console.log(alienShip5);
 
 const alienShip6 = new alienShip('Razun');
 console.log(alienShip6);
+
+ussAssShip.attack(alienShip1)
+Game.checkWin(alienShip1)
