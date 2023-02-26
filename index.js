@@ -15,7 +15,7 @@ class Ship {
         } else {
             console.log(`${this.name} missed!`)
         }
-        console.log(`${enemy.name} has ${enemy.hull} hp left.`)
+        console.log(`${enemy.name} has ${enemy.hull} hp left. ${this.name} has ${this.hull} hp left.`)
     }
 }
 // Create Human Ship Subclass
@@ -34,10 +34,10 @@ class alienShip extends Ship {
     constructor(name) {
         super(name)
     }
-        hull = Math.floor(Math.random() * 4) + 3;
-        firepower = Math.floor(Math.random() * 3) + 2;
-        accuracy = (Math.floor(Math.random() * 3) + 6) / 10;
-    }
+    hull = Math.floor(Math.random() * 4) + 3;
+    firepower = Math.floor(Math.random() * 3) + 2;
+    accuracy = (Math.floor(Math.random() * 3) + 6) / 10;
+}
 
 // Create a game object
 
@@ -50,31 +50,57 @@ class Game {
         }
     }
 
-    static playGame(humanPlayer, alienPlayers)
-    
+    static playGame(humanPlayer, alienPlayers) {
+        for (let i = 0; i < alienPlayers.length; i++) {
+            while (humanPlayer.hull > 0 && alienPlayers[i].hull > 0) {
+                humanPlayer.attack(alienPlayers[i]); 
+                this.checkWin(alienPlayers[i]);
+                if (alienPlayers[i].hull <= 0) {
+                    break
+                }
+                alienPlayers[i].attack(humanPlayer);
+                this.checkWin(humanPlayer);
+            };
+            if (humanPlayer.hull <= 0) {
+                alert(`The USS Assembly has been defeated. GAME OVER.`)
+                break
+            }
+            if (i === alienPlayers.length - 1) {
+                alert(`USS Assembly has defeated all the aliens. Earth wins!`)
+                break
+            }
+            if(!this.promptPlayer()){
+                break
+            }
+
+        };
+    }
+
+    static promptPlayer () {
+        let answer = prompt(`USS Assembly has defeated the alien ship. Do you want to continue to battle or retreat? Yes = Battle No = Retreat`);
+        if (answer.toLowerCase() === 'yes') {
+            console.log(`Onwards to victory!`)
+            return true
+        } else if (answer.toLowerCase() === 'no') {
+            alert(`USS Assembly has retreated!`)
+            return false
+        } else {
+            alert(`This is a yes or no question. You answered ${answer.toLowerCase()}. How did you not get that? ANSWER YES OR NO.`)
+            return this.promptPlayer();
+        }
+    }
 }
+
 // Instance(s) of each subclass
+const alienShips = []
+const alienName = ['Iczols', 'Troncins', 'Vrelkods', 'Oncids', 'Bhiegnons', 'Razun']
+
+for (let i = 0; i < 6; i++) {
+    alienShips.push(new alienShip(alienName[i]));
+}
+console.log(alienShips);
 
 const ussAssShip = new humanShip();
 console.log(ussAssShip);
 
-const alienShip1 = new alienShip('Iczols');
-console.log(alienShip1);
-
-const alienShip2 = new alienShip('Troncins');
-console.log(alienShip2);
-
-const alienShip3 = new alienShip('Vrelkods');
-console.log(alienShip3);
-
-const alienShip4 = new alienShip('Oncids');
-console.log(alienShip4);
-
-const alienShip5 = new alienShip('Bhiegnons');
-console.log(alienShip5);
-
-const alienShip6 = new alienShip('Razun');
-console.log(alienShip6);
-
-ussAssShip.attack(alienShip1)
-Game.checkWin(alienShip1)
+Game.playGame(ussAssShip,alienShips);
